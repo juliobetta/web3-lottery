@@ -12,3 +12,15 @@ Example project from [Udemy's Ethereum and Solidity: The Complete Developer's Gu
 * create a `.env` file based on `.env.example` and set the values:
   * **PASSPHRASE**: your wallet passphrase
   * **INFURA**: the https URL provided by infura
+
+### Test
+
+```
+yarn test
+```
+
+### Deploy
+
+```
+yarn deploy
+```
