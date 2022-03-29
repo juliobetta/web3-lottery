@@ -12,4 +12,12 @@ contract Lottery {
     // sender of the message (current call)
     manager = msg.sender;
   }
+  // when someone wants to join the lottery, it is expected that the player sends ether along
+  function enter() public payable {
+    // requires to send a minimum of 1 wei
+    require(msg.value > 1 wei);
+
+    // add the sender to the list of players
+    players.push(msg.sender);
+  }
 }

@@ -30,4 +30,41 @@ describe('Lottery', () => {
     assert.ok(message);
     assert.equal(message, accounts[0]);
   });
+
+  describe('with enter()', () => {
+    let playerAccount;
+
+    beforeEach(async () => {
+      // create a player account
+      playerAccount = accounts[1];
+    });
+
+    describe('when play enters with less than 1 wei', () => {
+      it('rejects the transaction', async () => {
+        try {
+          await lottery.methods.enter().send({
+            from: playerAccount,
+            value: 0,
+          });
+          assert(false);
+        } catch (err) {
+          assert(err);
+        }
+      });
+    });
+
+    describe('when play enters with more than 1 wei', () => {
+      it('accepts the transaction', async () => {
+        try {
+          await lottery.methods.enter().send({
+            from: playerAccount,
+            value: web3.utils.toWei('1', 'ether'),
+          });
+          assert(true);
+        } catch (err) {
+          assert(false);
+        }
+      });
+    });
+  });
 });
