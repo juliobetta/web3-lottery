@@ -23,4 +23,11 @@ describe('Lottery', () => {
   it('deploys a contract', () => {
     assert.ok(lottery.options.address);
   });
+
+  it('has a manager', async () => {
+    const message = await lottery.methods.manager().call();
+    console.log(message)
+    assert.ok(message);
+    assert.equal(message, accounts[0]);
+  });
 });
