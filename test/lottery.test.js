@@ -67,4 +67,35 @@ describe('Lottery', () => {
       });
     });
   });
+
+  it('picks a winner', async () => {
+    // create a player account
+    const playerAccount01 = accounts[1];
+    const playerAccount02 = accounts[2];
+
+    // send 2 wei to the lottery to play 1 account
+    await lottery.methods.enter().send({
+      from: playerAccount01,
+      value: web3.utils.toWei('2', 'wei'),
+    });
+
+    // send 2 wei to the lottery to play 2 account
+    await lottery.methods.enter().send({
+      from: playerAccount02,
+      value: web3.utils.toWei('2', 'wei'),
+    });
+
+    const contractBalanceBefore = await lottery.methods.getBalance().call();
+    assert.equal(contractBalanceBefore, web3.utils.toWei('4', 'wei'));
+
+    await lottery.methods.pickWinner().send({ from: accounts[0] });
+
+    const contractBalanceAfter = await lottery.methods.getBalance().call();
+    assert.equal(contractBalanceAfter, web3.utils.toWei('0', 'wei'));
+
+    const player01Balance = await lottery.methods.getPlayerBalance(playerAccount01).call();
+    const player02Balance = await lottery.methods.getPlayerBalance(playerAccount02).call();
+
+    assert.notEqual(player01Balance, player02Balance);
+  });
 });
