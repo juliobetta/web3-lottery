@@ -21,4 +21,16 @@ const input = {
   },
 };
 
-module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts['Lottery.sol'].Lottery;
+module.exports = (() => {
+  try {
+    const parsed = JSON.parse(solc.compile(JSON.stringify(input)));
+
+    if (parsed.errors) {
+      throw new Error(parsed.errors.map(error => JSON.stringify(error, null, 2)).join('\n'));
+    }
+
+    return parsed.contracts['Lottery.sol'].Lottery;
+  } catch(err) {
+    console.error(err);
+  }
+})();
